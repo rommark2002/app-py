@@ -44,3 +44,4 @@ EXPOSE 5000
 #COPY . .
 CMD ["flask", "run"]
 ###Activated pollSCM
+###Activated PollSCM general project use
