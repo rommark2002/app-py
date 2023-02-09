@@ -50,10 +50,10 @@ jobs:
         repository: ${{ env.GITHUB_REPOSITORY }}
         path: repository
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3.10.0
-      with:
-        java-version: 1.8
+    #- name: Set up JDK
+     # uses: actions/setup-java@v3.10.0
+      #with:
+      #  java-version: 1.8
 
     - name: Scan with SonarQube
       uses: SonarSource/sonarqube-scan-action@v1.2.0
