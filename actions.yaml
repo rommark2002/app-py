@@ -1,0 +1,44 @@
+name: SonarQube Analysis
+
+description: |
+  This composite action runs a SonarQube analysis on a project.
+
+inputs:
+  sonar-token:
+    description: 'The SonarQube authentication token.'
+    required: true
+  project-key:
+    description: 'The SonarQube project key.'
+    required: true
+  project-name:
+    description: 'The SonarQube project name.'
+    required: true
+  project-version:
+    description: 'The SonarQube project version.'
+    required: true
+  sources:
+    description: 'The source code directory to be analyzed.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: SonarQube Scan
+      run: |
+        docker run --rm \
+          -e SONAR_TOKEN=$INPUT_SONAR-TOKEN \
+          -v $(pwd):/usr/src \
+          sonarsource/sonar-scanner-cli:latest \
+          -Dsonar.projectKey=$INPUT_PROJECT-KEY \
+          -Dsonar.projectName=$INPUT_PROJECT-NAME \
+          -Dsonar.projectVersion=$INPUT_PROJECT-VERSION \
+          -Dsonar.sources=$INPUT_SOURCES \
+          -Dsonar.host.url=https://sonarcloud.io
+      env:
+        INPUT_SONAR-TOKEN: ${{ inputs.sonar-token }}
+        INPUT_PROJECT-KEY: ${{ inputs.project-key }}
+        INPUT_PROJECT-NAME: ${{ inputs.project-name }}
+        INPUT_PROJECT-VERSION: ${{ inputs.project-version }}
+        INPUT_SOURCES: ${{ inputs.sources }}
