@@ -1,0 +1,19 @@
+name: my-simple-workflow
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4.1.1
+    - name: Docker build
+      run: |
+        echo "Docker building"
+    - name: Docker Tag
+      run: |
+        echo "Docker tag our image"
+    - name: docker push
+      run: |
+        echo "Docker push"
+        
