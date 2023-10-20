@@ -1,19 +1,33 @@
-name: my-simple-workflow
+name: publish docker image
 on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  publish-docker-image-registry:
+    name: Publish and Push image to docker
+    runs-on: ubuntu-22.04
     steps:
-    - name: Checkout
+    
+    - name: Checkout the repo
       uses: actions/checkout@v4.1.1
-    - name: Docker build
-      run: |
-        echo "Docker building"
-    - name: Docker Tag
-      run: |
-        echo "Docker tag our image"
-    - name: docker push
-      run: |
-        echo "Docker push"
-        
+    
+    - name: Docker Login
+      uses: docker/login-action@v3.0.0
+      with:
+        username: ${{ secrets.DOCKERUSERNAME }}
+        password: ${{ secrets.DOCKERPASSWORD }}
+
+    - name: Docker Metadata action
+      id: meta
+      uses: docker/metadata-action@v5.0.0
+      with:
+        images: cmuriukin/class17-repo
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v5.0.0
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.output.tags }}  ##these tags can include tags based on git branches/commits etc.
+        labels: ${{ steps.meta.output.labels }}
+    
+      
